@@ -1,5 +1,7 @@
+import allure
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webdriver import WebDriver
 from pages.base_page import BasePage
 from locators.order_page_locators import OrderPageLocators
 
@@ -7,7 +9,8 @@ from locators.order_page_locators import OrderPageLocators
 class OrderPage(BasePage):
     """Page Object для страницы заказа"""
     
-    def fill_customer_form(self, first_name, last_name, address, metro_station, phone):
+    @allure.step('Заполнить форму "Для кого самокат"')  # type: ignore[misc]
+    def fill_customer_form(self, first_name: str, last_name: str, address: str, metro_station: str, phone: str) -> None:
         """
         Заполнить форму 'Для кого самокат'
         :param first_name: Имя
@@ -29,11 +32,13 @@ class OrderPage(BasePage):
         
         self.input_text(OrderPageLocators.PHONE_INPUT, phone)
     
-    def click_next_button(self):
+    @allure.step('Нажать кнопку "Далее"')  # type: ignore[misc]
+    def click_next_button(self) -> None:
         """Нажать кнопку 'Далее'"""
         self.click_element(OrderPageLocators.NEXT_BUTTON)
     
-    def fill_rental_form(self, delivery_date, rental_period, color, comment=""):
+    @allure.step('Заполнить форму "Про аренду"')  # type: ignore[misc]
+    def fill_rental_form(self, delivery_date: str, rental_period: str, color: str, comment: str = "") -> None:
         """
         Заполнить форму 'Про аренду'
         :param delivery_date: Дата доставки (формат: дд.мм.гггг)
@@ -60,18 +65,22 @@ class OrderPage(BasePage):
         if comment:
             self.input_text(OrderPageLocators.COMMENT_INPUT, comment)
     
-    def click_order_button(self):
+    @allure.step('Нажать кнопку "Заказать" на второй форме')  # type: ignore[misc]
+    def click_order_button(self) -> None:
         """Нажать кнопку 'Заказать' на второй форме"""
         self.click_element(OrderPageLocators.ORDER_BUTTON_FINAL)
     
-    def click_confirm_order(self):
+    @allure.step('Подтвердить заказ')  # type: ignore[misc]
+    def click_confirm_order(self) -> None:
         """Подтвердить заказ в модальном окне"""
         self.click_element(OrderPageLocators.CONFIRM_ORDER_BUTTON)
     
-    def is_success_message_displayed(self):
+    @allure.step('Проверить отображение сообщения об успешном заказе')  # type: ignore[misc]
+    def is_success_message_displayed(self) -> bool:
         """Проверить, отображается ли сообщение об успешном создании заказа"""
         return self.is_element_visible(OrderPageLocators.SUCCESS_MESSAGE)
     
-    def get_success_message_text(self):
+    @allure.step('Получить текст сообщения об успешном заказе')  # type: ignore[misc]
+    def get_success_message_text(self) -> str:
         """Получить текст сообщения об успешном заказе"""
         return self.get_text(OrderPageLocators.SUCCESS_MESSAGE)

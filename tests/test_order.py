@@ -1,5 +1,7 @@
 import pytest
 import allure
+from selenium.webdriver.remote.webdriver import WebDriver
+from typing import Dict, Any
 from pages.main_page import MainPage
 from pages.order_page import OrderPage
 from test_data import TestData
@@ -22,7 +24,7 @@ class TestOrder:
     )
     @allure.title('Заказ самоката через {button_type} кнопку')
     @allure.description('Проверка полного флоу заказа: заполнение форм + подтверждение + проверка успешного создания')
-    def test_order_scooter(self, driver, button_type, order_data):
+    def test_order_scooter(self, driver: WebDriver, button_type: str, order_data: Dict[str, Any]) -> None:
         """
         Параметризованный тест заказа самоката
         :param button_type: Тип кнопки ('top' или 'bottom')
@@ -34,10 +36,7 @@ class TestOrder:
         main_page.accept_cookies()
         
         # Нажать на кнопку "Заказать" (верхнюю или нижнюю)
-        if button_type == 'top':
-            main_page.click_order_button_top()
-        else:
-            main_page.click_order_button_bottom()
+        main_page.click_order_button(button_type)
         
         # Заполнить форму "Для кого самокат"
         order_page = OrderPage(driver)

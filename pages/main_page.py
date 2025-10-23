@@ -1,48 +1,70 @@
+import allure
+from selenium.webdriver.remote.webdriver import WebDriver
 from pages.base_page import BasePage
 from locators.main_page_locators import MainPageLocators
-from config import BASE_URL
+from urls import MAIN_PAGE_URL
 
 
 class MainPage(BasePage):
     """Page Object для главной страницы Яндекс.Самокат"""
     
-    def __init__(self, driver):
+    def __init__(self, driver: WebDriver) -> None:
         super().__init__(driver)
-        self.url = BASE_URL
+        self.url = MAIN_PAGE_URL
     
-    def open(self):
+    @allure.step('Открыть главную страницу')  # type: ignore[misc]
+    def open(self) -> None:
         """Открыть главную страницу"""
         self.open_url(self.url)
     
-    def accept_cookies(self):
+    @allure.step('Принять cookies')  # type: ignore[misc]
+    def accept_cookies(self) -> None:
         """Принять cookies, если появились"""
         try:
             self.click_element(MainPageLocators.COOKIE_BUTTON)
         except:
             pass  # Если cookies уже приняты или не появились
     
-    def click_order_button_top(self):
+    @allure.step('Нажать на верхнюю кнопку "Заказать"')  # type: ignore[misc]
+    def click_order_button_top(self) -> None:
         """Нажать на верхнюю кнопку 'Заказать'"""
         self.click_element(MainPageLocators.ORDER_BUTTON_TOP)
     
-    def click_order_button_bottom(self):
+    @allure.step('Нажать на нижнюю кнопку "Заказать"')  # type: ignore[misc]
+    def click_order_button_bottom(self) -> None:
         """Нажать на нижнюю кнопку 'Заказать'"""
         self.scroll_to_element(MainPageLocators.ORDER_BUTTON_BOTTOM)
         self.click_element(MainPageLocators.ORDER_BUTTON_BOTTOM)
     
-    def click_scooter_logo(self):
-        """Кликнуть на логотип Самоката"""
-        self.click_element(MainPageLocators.SCOOTER_LOGO)
+    @allure.step('Нажать на кнопку "Заказать" ({button_type})')  # type: ignore[misc]
+    def click_order_button(self, button_type: str) -> None:
+        """
+        Нажать на кнопку 'Заказать' (верхнюю или нижнюю)
+        :param button_type: 'топ' или 'bottom'
+        """
+        if button_type == 'top':
+            self.click_order_button_top()
+        else:
+            self.click_order_button_bottom()
     
-    def click_yandex_logo(self):
+    @allure.step('Кликнуть на логотип Самоката')  # type: ignore[misc]
+    def click_scooter_logo(self) -> None:
+        """Кликнуть на логотип Самоката"""
+        # Используем JavaScript для надежности
+        self.click_element_js(MainPageLocators.SCOOTER_LOGO)
+    
+    @allure.step('Кликнуть на логотип Яндекса')  # type: ignore[misc]
+    def click_yandex_logo(self) -> None:
         """Кликнуть на логотип Яндекса"""
         self.click_element(MainPageLocators.YANDEX_LOGO)
     
-    def scroll_to_faq(self):
+    @allure.step('Прокрутить до раздела FAQ')  # type: ignore[misc]
+    def scroll_to_faq(self) -> None:
         """Прокрутить страницу до раздела 'Вопросы о важном'"""
         self.scroll_to_element(MainPageLocators.FAQ_SECTION)
     
-    def click_faq_question(self, question_number):
+    @allure.step('Нажать на вопрос №{question_number} в FAQ')  # type: ignore[misc]
+    def click_faq_question(self, question_number: int) -> None:
         """
         Нажать на вопрос в FAQ
         :param question_number: номер вопроса (1-8)
@@ -51,7 +73,8 @@ class MainPage(BasePage):
         self.scroll_to_element(locator)
         self.click_element(locator)
     
-    def get_faq_answer_text(self, answer_number):
+    @allure.step('Получить текст ответа №{answer_number} в FAQ')  # type: ignore[misc]
+    def get_faq_answer_text(self, answer_number: int) -> str:
         """
         Получить текст ответа в FAQ
         :param answer_number: номер ответа (1-8)
@@ -60,7 +83,8 @@ class MainPage(BasePage):
         locator = getattr(MainPageLocators, f"FAQ_ANSWER_{answer_number}")
         return self.get_text(locator)
     
-    def is_faq_answer_visible(self, answer_number):
+    @allure.step('Проверить видимость ответа №{answer_number} в FAQ')  # type: ignore[misc]
+    def is_faq_answer_visible(self, answer_number: int) -> bool:
         """
         Проверить, виден ли ответ в FAQ
         :param answer_number: номер ответа (1-8)
@@ -69,6 +93,7 @@ class MainPage(BasePage):
         locator = getattr(MainPageLocators, f"FAQ_ANSWER_{answer_number}")
         return self.is_element_visible(locator)
     
-    def is_on_main_page(self):
+    @allure.step('Проверить, что находимся на главной странице')  # type: ignore[misc]
+    def is_on_main_page(self) -> bool:
         """Проверить, что находимся на главной странице"""
-        return self.driver.current_url == BASE_URL
+        return self.get_current_url() == MAIN_PAGE_URL

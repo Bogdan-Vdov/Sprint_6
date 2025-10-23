@@ -1,5 +1,6 @@
 import pytest
 import allure
+from selenium.webdriver.remote.webdriver import WebDriver
 from pages.main_page import MainPage
 from test_data import TestData
 
@@ -33,21 +34,21 @@ class TestFAQ:
     )
     @allure.title('Проверка раскрытия ответа на вопрос {question_number}')
     @allure.description('При нажатии на вопрос открывается соответствующий текст ответа')
-    def test_faq_questions(self, driver, question_number, expected_answer):
+    def test_faq_questions(self, driver: WebDriver, question_number: int, expected_answer: str) -> None:
         """Параметризованный тест для проверки всех вопросов FAQ"""
         main_page = MainPage(driver)
-        main_page.open()
-        main_page.accept_cookies()
-        main_page.scroll_to_faq()
+        main_page.open()  # type: ignore[reportCallIssue]
+        main_page.accept_cookies()  # type: ignore[reportCallIssue]
+        main_page.scroll_to_faq()  # type: ignore[reportCallIssue]
         
         # Нажать на вопрос
-        main_page.click_faq_question(question_number)
+        main_page.click_faq_question(question_number)  # type: ignore[reportCallIssue]
         
         # Проверить, что ответ отображается
-        assert main_page.is_faq_answer_visible(question_number), \
-            f"Ответ на вопрос {question_number} не отображается"
+        is_visible = main_page.is_faq_answer_visible(question_number)  # type: ignore[reportCallIssue]
+        assert is_visible, f"Ответ на вопрос {question_number} не отображается"
         
         # Проверить текст ответа
-        answer_text = main_page.get_faq_answer_text(question_number)
+        answer_text = main_page.get_faq_answer_text(question_number)  # type: ignore[reportCallIssue]
         assert expected_answer in answer_text, \
             f"Текст ответа на вопрос {question_number} не соответствует ожидаемому.\nОжидается: {expected_answer}\nПолучен: {answer_text}"
