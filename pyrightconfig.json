@@ -1,0 +1,21 @@
+{
+  "venvPath": "C:\\Program Files\\Python313",
+  "pythonVersion": "3.13",
+  "pythonPlatform": "Windows",
+  "executionEnvironments": [
+    {
+      "root": "."
+    }
+  ],
+  "reportCallIssue": "none",
+  "reportGeneralTypeIssues": "none",
+  "reportMissingImports": "none",
+  "reportMissingTypeStubs": "none",
+  "reportUnknownParameterType": "none",
+  "reportUnknownArgumentType": "none",
+  "reportUnknownMemberType": "none",
+  "reportUnknownVariableType": "none",
+  "reportAttributeAccessIssue": "none",
+  "strictParameterNoneValue": false,
+  "typeCheckingMode": "basic"
+}
